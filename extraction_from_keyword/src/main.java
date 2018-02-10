@@ -15,15 +15,20 @@ public class main {
             br = new BufferedReader(fr);
 
             String sCurrentLine;
+            String prevSentence = "";
 
             while ((sCurrentLine = br.readLine()) != null) {
                 String[] words = sCurrentLine.split(" ");
                 for(int i=1;i<words.length-1;i++){
 
                     if(words[i].equals("v.")){
-                        sentenceList.add((sCurrentLine));
-                        caseList.add(new String(words[i-1].replaceAll("[^a-zA-Z]","")));
-                        caseList.add(new String(words[i+1].replaceAll("[^a-zA-Z]","")));
+                        if(sCurrentLine.contains("See") || sCurrentLine.contains("see")){
+                            sentenceList.add(prevSentence);
+                        }else{
+                            sentenceList.add((sCurrentLine));
+                            caseList.add(new String(words[i-1].replaceAll("[^a-zA-Z]","")));
+                            caseList.add(new String(words[i+1].replaceAll("[^a-zA-Z]","")));
+                        }
 
                         break;
                     }else if(words[i-1].matches("[0-9]+") && words[i].equals("U.") && words[i+1].equals("S.")){
@@ -44,6 +49,7 @@ public class main {
                         }
                     }
                 }
+                prevSentence = sCurrentLine;
             }
 
             for (String item:sentenceList){
