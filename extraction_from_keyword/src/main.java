@@ -6,11 +6,12 @@ import java.util.ArrayList;
 public class main {
     public static void main(String[] args) {
         ArrayList<String> sentenceList = new ArrayList<>();
+        ArrayList<String> caseList = new ArrayList<>();
         BufferedReader br = null;
         FileReader fr = null;
         try {
             //br = new BufferedReader(new FileReader(FILENAME));
-            fr = new FileReader("/home/viraj/demotext.txt");
+            fr = new FileReader("/home/viraj/demotext2.txt");
             br = new BufferedReader(fr);
 
             String sCurrentLine;
@@ -18,13 +19,29 @@ public class main {
             while ((sCurrentLine = br.readLine()) != null) {
                 String[] words = sCurrentLine.split(" ");
                 for(int i=1;i<words.length-1;i++){
-                    String regex = "[0-9]+";
+
                     if(words[i].equals("v.")){
                         sentenceList.add((sCurrentLine));
+                        caseList.add(new String(words[i-1].replaceAll("[^a-zA-Z]","")));
+                        caseList.add(new String(words[i+1].replaceAll("[^a-zA-Z]","")));
+
                         break;
                     }else if(words[i-1].matches("[0-9]+") && words[i].equals("U.") && words[i+1].equals("S.")){
                         sentenceList.add((sCurrentLine));
                         break;
+                    }
+                }
+                for(int j=0; j<words.length; j++){
+                    String newString = words[j].replaceAll("[^a-zA-Z]","");
+                    if(caseList.contains(newString)){
+                        if(!sentenceList.contains(sCurrentLine)){
+                            sentenceList.add(sCurrentLine);
+                        }
+
+                    } else if(words[j].toLowerCase().contains("id.")){
+                        if(!sentenceList.contains(sCurrentLine)){
+                            sentenceList.add(sCurrentLine);
+                        }
                     }
                 }
             }
@@ -54,10 +71,6 @@ public class main {
             }
 
         }
-    }
-
-    public static String sentenceSelecter(String text){
-        return "not set";
     }
 
 }
